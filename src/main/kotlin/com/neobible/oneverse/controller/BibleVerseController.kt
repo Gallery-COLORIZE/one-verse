@@ -29,10 +29,7 @@ class BibleVerseController (
         // AI 서비스 계층 호출
         val result = bibleVerseService.getBibleMessage(type, situationInput)
 
-        // 1. 메시지 모델에 추가
         model.addAttribute("message", result)
-
-        // 입력값 유지를 위해
         model.addAttribute("type", type)
 
         return "index"
