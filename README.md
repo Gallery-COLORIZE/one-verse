@@ -31,6 +31,7 @@ OneVerse는 AI가 신앙생활에 긍정적인 영향을 줄 수 있다는 가�
 - [기술 스택](#기술-스택)
 - [프로젝트 구조](#프로젝트-구조)
 - [실행 방법](#실행-방법)
+- [CI/CD](#cicd)
 - [AI 응답 원칙](#ai-응답-원칙)
 - [주의 사항](#주의-사항)
 - [로드맵](#로드맵)
@@ -117,7 +118,8 @@ Spring AI + Google GenAI
     │       ├── application.yml
     │       └── templates/index.html
     └── test/kotlin/com/neobible/oneverse
-        └── OneVerseApplicationTests.kt
+        ├── controller/BibleVerseControllerTest.kt
+        └── service/BibleVerseServiceTest.kt
 ```
 
 ## 실행 방법
@@ -171,9 +173,50 @@ Windows PowerShell:
 ### 4. Docker 실행
 
 ```bash
-docker build -t oneverse:1.0.0 .
-docker run --rm -p 8080:8080 -e GOOGLE_API_KEY="your-google-genai-api-key" oneverse:1.0.0
+docker build -t isaiahim0214/colorize-neo-bible-oneverse:1.0.0 .
+docker run --rm -p 8080:8080 -e GOOGLE_API_KEY="your-google-genai-api-key" isaiahim0214/colorize-neo-bible-oneverse:1.0.0
 ```
+
+## CI/CD
+
+GitHub Actions 워크플로는 `.github/workflows/ci-cd.yml`에서 관리합니다. `main` 브랜치에 커밋이 push되면 전체 테스트, Docker 이미지 빌드 및 push, OpenVPN 내부망 접속, SSH 서버 배포, 배포 완료 확인 순서로 실행됩니다.
+
+> Docker 이미지 이름은 Docker registry 규칙에 맞춰 소문자인 `isaiahim0214/colorize-neo-bible-oneverse`를 사용합니다.
+
+### Pipeline
+
+| 단계 | 내용 |
+| --- | --- |
+| 1 | 전체 테스트 코드 실행 |
+| 2 | Docker 이미지 빌드 및 Docker Hub push |
+| 3 | OpenVPN으로 내부망 접속 |
+| 4 | 서버 SSH 접속 |
+| 5 | 서버에서 Docker image pull |
+| 6 | 서버에 `.env` 환경변수 파일 생성 |
+| 7 | 기존 컨테이너 교체 배포 |
+| 8 | HTTP 응답으로 배포 완료 확인 |
+
+### Required GitHub Secrets
+
+| Secret | 설명 |
+| --- | --- |
+| `DOCKERHUB_USERNAME` | Docker Hub 사용자명 |
+| `DOCKERHUB_TOKEN` | Docker Hub access token |
+| `OPENVPN_CONFIG` | 내부망 접속용 `.ovpn` 설정 파일 전체 내용 |
+| `SERVER_HOST` | VPN 접속 후 접근 가능한 서버 주소 |
+| `SERVER_USER` | SSH 접속 사용자 |
+| `SSH_PRIVATE_KEY` | SSH 접속용 private key |
+| `GOOGLE_API_KEY` | Google GenAI API key |
+
+### Optional GitHub Secrets
+
+| Secret | 기본값 | 설명 |
+| --- | --- | --- |
+| `OPENVPN_USERNAME` | 없음 | OpenVPN 사용자명 인증이 필요한 경우 |
+| `OPENVPN_PASSWORD` | 없음 | OpenVPN 비밀번호 인증이 필요한 경우 |
+| `SSH_KNOWN_HOSTS` | `ssh-keyscan` 사용 | 서버 host key를 고정하고 싶은 경우 |
+| `SERVER_PORT` | `22` | SSH 포트 |
+| `APP_PORT` | `8080` | 서버에 노출할 애플리케이션 포트 |
 
 ## 설정
 
@@ -233,7 +276,7 @@ OneVerse는 사용자가 AI와의 대화에서 끝나는 것이 아니라, 성�
 
 이 프로젝트를 기획하시고, 인도하시고, 개발하도록 능력주신 주님께 모든 영광을 드립니다.
 
-> 내게 능력주시는 자 안에서 내가 모든 것을 할 수 있느니라.  
+> 내게 능력주시는 자 안에서 내가 모든 것을 할 수 있느니라.<br>
 > \- 빌 4:13
 
 Copyright Jesus Christ. All rights reserved.
