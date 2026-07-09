@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneVerse - 나를 위한 말씀</title>
+  <style>
+    /* 기본 스타일 및 폰트 설정 */
+    :root {
+      --primary-color: #4A5568;
+      --primary-hover: #2D3748;
+      --bg-color: #F7FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #2D3748;
+      --text-muted: #718096;
+      --accent-color: #E2E8F0;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 500px;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      margin: 0 0 10px 0;
+      color: var(--text-main);
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* 폼 영역 */
+    .radio-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      justify-content: center;
+    }
+
+    .radio-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 500;
+      padding: 10px 15px;
+      border: 1px solid var(--accent-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .radio-label:hover {
+      background-color: var(--bg-color);
+    }
+
+    .radio-label input[type="radio"] {
+      margin-right: 8px;
+      accent-color: var(--primary-color);
+    }
+
+    .input-group {
+      margin-bottom: 25px;
+      transition: opacity 0.3s ease;
+    }
+
+    /* input 텍스트와 textarea 공통 스타일 */
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid var(--accent-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit; /* 폰트 일치 */
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    /* textarea 전용 스타일 추가 */
+    textarea {
+      resize: vertical; /* 세로로만 크기 조절 가능하게 설정 */
+      min-height: 120px;
+      line-height: 1.5;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--primary-color);
+    }
+
+    /* 버튼 및 로딩 상태 디자인 */
+    button.submit-btn {
+      width: 100%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    button.submit-btn:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    button.submit-btn:disabled {
+      background-color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    /* 로딩 스피너 애니메이션 */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+      display: none;
+    }
+
+    /* 결과 출력 영역 */
+    .result-card {
+      margin-top: 30px;
+      padding: 25px;
+      background-color: var(--bg-color);
+      border-radius: 12px;
+      border-left: 4px solid var(--primary-color);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .result-card h3 {
+      margin: 0 0 10px 0;
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    .result-message {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      font-weight: 500;
+      margin: 0;
+      word-break: keep-all;
+      white-space: pre-wrap; /* AI 응답에 줄바꿈이 있을 경우 적용되도록 설정 */
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>📖 OneVerse</h1>
+    <p>지금 당신에게 필요한 말씀을 받아보세요.</p>
+  </div>
+
+  <form th:action="@{/}" method="post" onsubmit="showLoading()">
+
+    <div class="radio-group">
+      <label class="radio-label">
+        <input type="radio" name="type" id="typeToday" value="TODAY"
+               th:checked="${type == null || type == 'TODAY'}" onchange="toggleInput()"> 오늘의 말씀
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="type" id="typeSituation" value="SITUATION"
+               th:checked="${type == 'SITUATION'}" onchange="toggleInput()"> 내 상황 입력
+      </label>
+    </div>
+
+    <div class="input-group" id="situationInputGroup">
+      <textarea id="situationInput" name="situationInput"
+                placeholder="요즘 어떤 고민이나 감정을 느끼고 계신가요? 편하게 적어주세요."
+                th:text="${situationInput}"></textarea>
+    </div>
+
+    <button type="submit" id="submitBtn" class="submit-btn">
+      <span class="spinner" id="loadingSpinner"></span>
+      <span id="btnText">말씀 받기</span>
+    </button>
+  </form>
+
+  <div class="result-card" th:if="${message != null}">
+    <h3>🙏 AI 사역자의 응답</h3>
+    <p class="result-message" th:text="${message}"></p>
+  </div>
+</div>
+
+<script>
+  function toggleInput() {
+    const isSituation = document.getElementById('typeSituation').checked;
+    const inputGroup = document.getElementById('situationInputGroup');
+
+    if (isSituation) {
+      inputGroup.classList.remove('hidden');
+      document.getElementById('situationInput').focus();
+    } else {
+      inputGroup.classList.add('hidden');
+    }
+  }
+
+  function showLoading() {
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const spinner = document.getElementById('loadingSpinner');
+
+    submitBtn.disabled = true;
+    btnText.innerText = '말씀이 응답중입니다...';
+    spinner.style.display = 'inline-block';
+  }
+
+  window.onload = toggleInput;
+</script>
+
+</body>
+</html>
