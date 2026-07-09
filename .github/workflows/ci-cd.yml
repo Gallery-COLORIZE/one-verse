@@ -249,7 +249,7 @@ jobs:
 
           if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_TOKEN" ]; then
             printf '%s' "$DOCKERHUB_TOKEN" | ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" \
-              "docker login --username '$DOCKERHUB_USERNAME' --password-stdin"
+              "sudo docker login --username '$DOCKERHUB_USERNAME' --password-stdin"
           fi
 
           ssh -i ~/.ssh/deploy_key -p "$SERVER_PORT" "$SERVER_USER@$SERVER_HOST" \
@@ -258,9 +258,9 @@ jobs:
 
           DEPLOY_DIR="$HOME/oneverse"
 
-          docker pull "$IMAGE_REF"
-          docker rm -f "$APP_NAME" 2>/dev/null || true
-          docker run -d \
+          sudo docker pull "$IMAGE_REF"
+          sudo docker rm -f "$APP_NAME" 2>/dev/null || true
+          sudo docker run -d \
             --name "$APP_NAME" \
             --restart unless-stopped \
             --env-file "$DEPLOY_DIR/.env" \
@@ -284,7 +284,7 @@ jobs:
                 exit 0
               fi
             else
-              if [ "$(docker inspect -f '{{.State.Running}}' "$APP_NAME")" = "true" ]; then
+              if [ "$(sudo docker inspect -f '{{.State.Running}}' "$APP_NAME")" = "true" ]; then
                 echo "Container is running. Install curl on the server for HTTP verification."
                 exit 0
               fi
@@ -294,7 +294,7 @@ jobs:
           done
 
           echo "Deployment verification failed."
-          docker logs --tail 100 "$APP_NAME"
+          sudo docker logs --tail 100 "$APP_NAME"
           exit 1
           REMOTE
 
