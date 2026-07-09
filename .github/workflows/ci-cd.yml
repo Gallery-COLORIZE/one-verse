@@ -39,7 +39,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     outputs:
-      image-ref: ${{ steps.image.outputs.image-ref }}
+      image_ref: ${{ steps.image.outputs.image_ref }}
       version: ${{ steps.version.outputs.version }}
 
     steps:
@@ -100,7 +100,7 @@ jobs:
           docker push "$IMAGE_VERSION"
           docker push "$IMAGE_LATEST"
 
-          echo "image-ref=$IMAGE_SHA" >> "$GITHUB_OUTPUT"
+          echo "image_ref=$IMAGE_SHA" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Deploy
@@ -113,7 +113,7 @@ jobs:
       cancel-in-progress: false
 
     env:
-      IMAGE_REF: ${{ needs.docker.outputs.image-ref }}
+      IMAGE_REF: ${{ needs.docker.outputs.image_ref }}
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
       SERVER_PORT: ${{ secrets.SERVER_PORT || '22' }}
       SERVER_USER: ${{ secrets.SERVER_USER }}
