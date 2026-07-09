@@ -113,7 +113,8 @@ jobs:
       cancel-in-progress: false
 
     env:
-      IMAGE_REF: ${{ needs.docker.outputs.image_ref || format('{0}:{1}', env.IMAGE_NAME, needs.docker.outputs.version) }}
+      IMAGE_REF: ${{ needs.docker.outputs.image_ref }}
+      IMAGE_VERSION: ${{ needs.docker.outputs.version }}
       SERVER_HOST: ${{ secrets.SERVER_HOST }}
       SERVER_PORT: ${{ secrets.SERVER_PORT || '22' }}
       SERVER_USER: ${{ secrets.SERVER_USER }}
@@ -236,6 +237,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
+          if [ -z "$IMAGE_REF" ] && [ -n "$IMAGE_VERSION" ]; then
+            IMAGE_REF="$IMAGE_NAME:$IMAGE_VERSION"
+          fi
 
           if [ -z "$IMAGE_REF" ]; then
             echo "IMAGE_REF is empty."
