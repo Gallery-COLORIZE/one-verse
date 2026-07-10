@@ -167,19 +167,78 @@
     }
 
     .result-card h3 {
-      margin: 0 0 10px 0;
+      margin: 0 0 15px 0;
       font-size: 1rem;
       color: var(--text-muted);
     }
 
+    /* AI 말씀 스타일 */
     .result-message {
       font-size: 1.2rem;
       line-height: 1.6;
       color: var(--text-main);
       font-weight: 500;
-      margin: 0;
+      margin: 0 0 20px 0;
       word-break: keep-all;
-      white-space: pre-wrap; /* AI 응답에 줄바꿈이 있을 경우 적용되도록 설정 */
+      white-space: pre-wrap;
+    }
+
+    /* 구절 출처 영역 스타일 */
+    .source-container {
+      text-align: right;
+    }
+
+    /* 💡 호버/클릭용 툴팁 감싸는 클래스 */
+    .verse-source-tooltip {
+      position: relative;
+      display: inline-block;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 1px dashed var(--text-muted); /* 힌트용 밑줄 */
+      padding-bottom: 2px;
+    }
+
+    /* 💡 툴팁으로 나타날 원본 말씀 박스 */
+    .verse-source-tooltip .tooltip-content {
+      visibility: hidden;
+      width: 280px;
+      background-color: #2d3748d9; /* 살짝 투명한 어두운 배경 */
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 12px 15px;
+      position: absolute;
+      z-index: 10;
+      bottom: 130%; /* 구절 글자 위에 배치 */
+      right: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.85rem;
+      font-weight: 400;
+      line-height: 1.4;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      word-break: keep-all;
+    }
+
+    /* 툴팁 아래에 작은 말풍선 삼각형 추가 */
+    .verse-source-tooltip .tooltip-content::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      right: 20px;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #2d3748d9 transparent transparent transparent;
+    }
+
+    /* 🔥 마우스를 올리거나(Hover) 클릭(Active)했을 때 노출 */
+    .verse-source-tooltip:hover .tooltip-content,
+    .verse-source-tooltip:active .tooltip-content {
+      visibility: visible;
+      opacity: 1;
     }
 
     @keyframes fadeIn {
@@ -227,7 +286,19 @@
 
   <div class="result-card" th:if="${message != null}">
     <h3>🙏 AI 사역자의 응답</h3>
-    <p class="result-message" th:text="${message}"></p>
+
+    <p class="result-message" th:text="${message.customVerse}"></p>
+
+    <div class="source-container">
+      <div class="verse-source-tooltip">
+        <span th:text="${message.verseSource}">구절 출처</span>
+
+        <div class="tooltip-content">
+          <strong style="display:block; margin-bottom:5px; color:#E2E8F0;">[말씀 원본]</strong>
+          <span th:text="${message.originalVerse}">말씀 원본 내용이 여기에 들어갑니다.</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
