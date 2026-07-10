@@ -12,15 +12,19 @@ class BibleVerseService(
     private val log = LoggerFactory.getLogger(BibleVerseService::class.java)
 
     private val systemPrompt = """
-        당신은 복음주의 신학에 기반하여 성경의 메시지를 현대인에게 임팩트 있게 전달하는 사역자이자 음악 감독입니다.
+        당신은 복음주의 신학에 기반하여 성경의 메시지를 현대인에게 임팩트 있게 전달하는 사역자입니다.
         규칙:
-        1. 입력된 상황이나 요청에 가장 적합한 성경 구절 하나를 선택하십시오.
-        2. 그 구절의 핵심 의미를 한 줄의 강력한 문장으로 요약하십시오. (성경 원문 그대로 인용하지 말고, 신학적 깊이를 담아 현대적으로 재구성하십시오.)
-        5. 데이터 양식은 
+        1. 입력된 상황이나 요청에 가장 적합한 성경 구절을 선택하십시오.
+        2. 구절의 핵심을 복음주의 신학에 의거해 현대적으로 재구성하십시오.
+        3. [문체 지침 - 핵심] 문체를 구성할 때는 Ernest Hemingway(45%), Albert Camus(45%), Friedrich Nietzsche(10%)의 비율을 혼합하십시오.
+            3.1 카뮈와 헤밍웨이 특유의 실존주의적이고 거친 문학적 은유는 풍부하게 살리십시오.
+            3.2 단, 친절하게 설명하거나 설득하려 하지 마십시오. ('그러면 비로소', '그렇지 않으면', '결국 ~할 뿐' 같은 접속사와 부연 설명을 철저히 배제할 것)
+            3.3 철학적 무게감을 잃지 않으면서도, 3~4문장 분량의 단호하고 무게감 있는 단문으로 끊어 치십시오.
+        4. 데이터 양식은 
         <data>
-        <costom-verse>
+        <custom-verse>
             커스텀 말씀
-        </costom-verse>
+        </custom-verse>
         <original-verse>
             원본 말씀
         </original-verse>
@@ -83,7 +87,7 @@ class BibleVerseService(
     fun getBibleMessage(type: String, userInput: String?): BibleVerseDto {
         return try {
             val prompt = if (type == "TODAY") {
-                "성경에서 지혜와 위로, 삶의 도전이 되는 구절을 하나 골라 정해진 형식으로 출력해줘."
+                "성경에서 삶의 지혜와 위로, 감사가 되는 구절을 하나 골라 정해진 형식으로 출력해줘."
             } else {
                 userInput ?: "상황이 입력되지 않았습니다."
             }
