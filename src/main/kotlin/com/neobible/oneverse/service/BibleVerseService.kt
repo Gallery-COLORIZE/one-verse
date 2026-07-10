@@ -20,6 +20,7 @@ class BibleVerseService(
             3.1 카뮈와 헤밍웨이 특유의 실존주의적이고 거친 문학적 은유는 풍부하게 살리십시오.
             3.2 단, 친절하게 설명하거나 설득하려 하지 마십시오. ('그러면 비로소', '그렇지 않으면', '결국 ~할 뿐' 같은 접속사와 부연 설명을 철저히 배제할 것)
             3.3 철학적 무게감을 잃지 않으면서도, 3~4문장 분량의 단호하고 무게감 있는 단문으로 끊어 치십시오.
+            3.4 이 말씀은 성경과 기독교를 기반으로 합니다. '신'과 같은 범 종교적인 단어 대신 '여호와', '하나님', '나(화자를 여호와로 가정)' 과 같은 단어를 사용하십시오.
         4. 데이터 양식은 
         <data>
         <custom-verse>
@@ -45,34 +46,6 @@ class BibleVerseService(
                 </original-verse>
                 <verse-source>
                     이사야 41:10
-                </verse-source>
-            </data>
-
-            - 사용자의 상황: 새로운 시작을 앞두고 있어
-            
-            - 응답:
-            <data>
-                <custom-verse>
-                    두려워 마라, 내가 너의 길을 열겠다.
-                </custom-verse>
-                <original-verse>
-                    내가 네게 명령한 것이 아니냐 강하고 담대하라 두려워하지 말며 놀라지 말라 네가 어디로 가든지 네 하나님 여호와가 너와 함께 하느니라 하시니라
-                </original-verse>
-                <verse-source>
-                    여호수아 1:9
-                </verse-source>
-            </data>
-            - 사용자의 상황: 죄책감이 들어
-            - 응답:
-            <data>
-                <custom-verse>
-                    너의 모든 허물을 내가 덮었다. 자유하라.
-                </custom-verse>
-                <original-verse>
-                    그러므로 이제 그리스도 예수 안에 있는 자에게는 결코 정죄함이 없나니 이는 그리스도 예수 안에 있는 생명의 성령의 법이 죄와 사망의 법에서 1)너를 해방하였음이라
-                </original-verse>
-                <verse-source>
-                    로마서 8:1-2
                 </verse-source>
             </data>
     """.trimIndent()
