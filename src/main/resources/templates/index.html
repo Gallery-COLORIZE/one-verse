@@ -289,6 +289,10 @@
   </div>
 
   <form th:action="@{/}" method="post" onsubmit="showLoading()">
+    <input th:if="${message != null and message.verseSource != 'Error'}"
+           type="hidden"
+           name="prevVerse"
+           th:value="${message.verseSource}">
 
     <div class="radio-group">
       <label class="radio-label">

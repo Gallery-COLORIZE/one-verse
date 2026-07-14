@@ -57,13 +57,14 @@ class BibleVerseService(
     /**
      * 성경 구절 출력
      */
-    fun getBibleMessage(type: String, userInput: String?): BibleVerseDto {
+    fun getBibleMessage(type: String, userInput: String?, prevVerse: String? = null): BibleVerseDto {
         return try {
-            val prompt = if (type == "TODAY") {
+            val basePrompt = if (type == "TODAY") {
                 "성경에서 삶의 지혜와 위로, 감사가 되는 구절을 하나 골라 정해진 형식으로 출력해줘."
             } else {
                 userInput ?: "상황이 입력되지 않았습니다."
             }
+            val prompt = buildPromptExcludingPreviousVerse(basePrompt, prevVerse)
 
             val xmlResult = chatClient.prompt()
                 .user(prompt)
@@ -89,6 +90,21 @@ class BibleVerseService(
                 verseSource = "Error"
             )
         }
+    }
+
+    private fun buildPromptExcludingPreviousVerse(basePrompt: String, prevVerse: String?): String {
+        val verse = prevVerse?.trim()
+        if (verse.isNullOrBlank()) {
+            return basePrompt
+        }
+
+        return """
+            $basePrompt
+
+            이전에 추천한 말씀은 제외하고 다른 성경 구절을 선택하십시오.
+            제외할 이전 말씀:
+            - 출처: $verse
+        """.trimIndent()
     }
 
     fun parseVerseXml(xmlString: String): BibleVerseDto {

@@ -103,6 +103,30 @@ class BibleVerseServiceTest : BehaviorSpec({
         }
     }
 
+    Given("이전에 받은 말씀을 제외하고 다시 요청하는 경우") {
+        val aiContent = """
+            <data>
+                <custom-verse>커스텀말씀</custom-verse>
+                <original-verse>두려워 말라 내가 너와 함께 함이니라</original-verse>
+                <verse-source>이사야 41:10</verse-source>
+            </data>
+        """.trimIndent()
+        val fixture = BibleVerseServiceFixture(aiContent = aiContent)
+        val service = fixture.createService()
+
+        When("말씀을 연속으로 요청") {
+            service.getBibleMessage("TODAY", null)
+            service.getBibleMessage("TODAY", null, "이사야 41:10")
+
+            Then("두 번째 요청에는 이전 말씀 제외 조건을 포함") {
+                fixture.userPrompts.size shouldBe 2
+                fixture.userPrompts[0] shouldBe "성경에서 삶의 지혜와 위로, 감사가 되는 구절을 하나 골라 정해진 형식으로 출력해줘."
+                fixture.userPrompts[1] shouldContain "이전에 추천한 말씀은 제외"
+                fixture.userPrompts[1] shouldContain "이사야 41:10"
+            }
+        }
+    }
+
     Given("AI 응답 본문이 비어있는 경우") {
         val fixture = BibleVerseServiceFixture(aiContent = null)
         val service = fixture.createService()
@@ -180,13 +204,14 @@ private class BibleVerseServiceFixture(
     val chatClient: ChatClient = mockk()
     val requestSpec: ChatClient.ChatClientRequestSpec = mockk()
     val callSpec: ChatClient.CallResponseSpec = mockk()
+    val userPrompts = mutableListOf<String>()
     private val systemPrompt = slot<String>()
 
     fun createService(): BibleVerseService {
         every { builder.defaultSystem(capture(systemPrompt)) } returns builder
         every { builder.build() } returns chatClient
         every { chatClient.prompt() } returns requestSpec
-        every { requestSpec.user(any<String>()) } returns requestSpec
+        every { requestSpec.user(capture(userPrompts)) } returns requestSpec
         every { requestSpec.call() } returns callSpec
         every { callSpec.content() } returns aiContent
 

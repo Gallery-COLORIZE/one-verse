@@ -30,6 +30,7 @@ class BibleVerseControllerTest : BehaviorSpec({
         val model = ExtendedModelMap()
         val type = "SITUATION"
         val situationInput = "기분이 안좋아"
+        val prevVerse = "이전구절"
         val bibleVerse = BibleVerseDto(
             customVerse = "커스텀말씀",
             originalVerse = "원본말씀",
@@ -37,21 +38,22 @@ class BibleVerseControllerTest : BehaviorSpec({
         )
 
         every {
-            bibleVerseService.getBibleMessage(type, situationInput)
+            bibleVerseService.getBibleMessage(type, situationInput, prevVerse)
         } returns bibleVerse
 
         When("메시지 생성") {
-            val viewName = controller.getMessage(type, situationInput, model)
+            val viewName = controller.getMessage(type, situationInput, prevVerse, model)
 
             Then("index 화면에 말씀 DTO와 선택 타입을 담아 반환") {
                 viewName shouldBe "index"
                 model.asMap()["message"] shouldBe bibleVerse
                 model.asMap()["type"] shouldBe type
+                model.asMap()["situationInput"] shouldBe situationInput
             }
 
             Then("서비스에 사용자 입력을 전달") {
                 verify(exactly = 1) {
-                    bibleVerseService.getBibleMessage(type, situationInput)
+                    bibleVerseService.getBibleMessage(type, situationInput, prevVerse)
                 }
             }
         }

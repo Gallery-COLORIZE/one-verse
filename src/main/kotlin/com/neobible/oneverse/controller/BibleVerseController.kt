@@ -19,18 +19,17 @@ class BibleVerseController (
 
     @PostMapping("/")
     fun getMessage(
-        @RequestParam type: String, // "TODAY" 또는 "SITUATION"
+        @RequestParam type: String,
         @RequestParam(required = false) situationInput: String?,
+        @RequestParam(required = false) prevVerse: String?,
         model: Model
     ): String {
 
-
-
-        // AI 서비스 계층 호출
-        val result = bibleVerseService.getBibleMessage(type, situationInput)
+        val result = bibleVerseService.getBibleMessage(type, situationInput, prevVerse)
 
         model.addAttribute("message", result)
         model.addAttribute("type", type)
+        model.addAttribute("situationInput", situationInput)
 
         return "index"
     }
