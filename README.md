@@ -8,7 +8,7 @@ AI로 말씀을 더 가까이, 일상 속 묵상을 더 자연스럽게.
 ![Java](https://img.shields.io/badge/Java-21-007396?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.0-6DB33F?logo=springboot&logoColor=white)
 ![Spring AI](https://img.shields.io/badge/Spring%20AI-2.0.0-6DB33F)
-![Version](https://img.shields.io/badge/version-1.0.0-111827)
+![Version](https://img.shields.io/badge/version-1.1.4-111827)
 ![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
 
 </div>
