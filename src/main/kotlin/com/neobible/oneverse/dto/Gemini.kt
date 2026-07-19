@@ -45,7 +45,6 @@ data class InlineData(
 )
 
 
-// --- 클라이언트(프론트엔드) 통신용 DTO ---
 data class GenerateImageRequest(
     val prompt: String
 )

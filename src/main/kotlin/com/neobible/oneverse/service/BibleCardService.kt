@@ -10,7 +10,6 @@ import com.neobible.oneverse.dto.Part
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
-import java.util.Base64
 
 @Service
 class BibleCardService {
