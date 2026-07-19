@@ -84,7 +84,6 @@ class BibleVerseService(
 
             parseVerseXml(xmlResult)
         } catch (e: Exception) {
-            // 3. 예외 발생 시 에러 메시지를 담은 기본 DTO 반환
             BibleVerseDto(
                 customVerse = "",
                 originalVerse = "말씀을 준비하는 중에 오류가 발생했습니다: ${e.message}",
