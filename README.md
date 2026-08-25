@@ -212,8 +212,6 @@ GitHub Actions 워크플로는 `.github/workflows/ci-cd.yml`에서 관리합니�
 
 | Secret | 기본값 | 설명 |
 | --- | --- | --- |
-| `OPENVPN_USERNAME` | 없음 | OpenVPN 사용자명 인증이 필요한 경우 |
-| `OPENVPN_PASSWORD` | 없음 | OpenVPN 비밀번호 인증이 필요한 경우 |
 | `SSH_KNOWN_HOSTS` | `ssh-keyscan` 사용 | 서버 host key를 고정하고 싶은 경우 |
 | `SERVER_PORT` | `22` | SSH 포트 |
 | `APP_PORT` | `8080` | 서버에 노출할 애플리케이션 포트 |

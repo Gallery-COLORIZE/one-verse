@@ -132,8 +132,6 @@ jobs:
       - name: Connect to internal network with OpenVPN
         env:
           OPENVPN_CONFIG: ${{ secrets.OPENVPN_CONFIG }}
-          OPENVPN_USERNAME: ${{ secrets.OPENVPN_USERNAME }}
-          OPENVPN_PASSWORD: ${{ secrets.OPENVPN_PASSWORD }}
         shell: bash
         run: |
           set -euo pipefail
@@ -145,17 +143,6 @@ jobs:
 
           printf '%s' "$OPENVPN_CONFIG" > client.ovpn
           chmod 600 client.ovpn
-
-          if [ -n "$OPENVPN_USERNAME" ] && [ -n "$OPENVPN_PASSWORD" ]; then
-            printf '%s\n%s\n' "$OPENVPN_USERNAME" "$OPENVPN_PASSWORD" > vpn-auth.txt
-            chmod 600 vpn-auth.txt
-
-            if grep -q '^auth-user-pass' client.ovpn; then
-              sed -i 's|^auth-user-pass.*|auth-user-pass vpn-auth.txt|' client.ovpn
-            else
-              printf '\nauth-user-pass vpn-auth.txt\n' >> client.ovpn
-            fi
-          fi
 
           sudo openvpn \
             --config client.ovpn \
