@@ -60,6 +60,7 @@ class BibleCardServiceTest : BehaviorSpec({
         When("기본 설정으로 카드 이미지를 생성하면") {
             val result = fixture.service.generateVerseCardImageBase64(verse)
 
+
             Then("base64 이미지 데이터를 반환한다") {
                 result shouldBe "base64-image-data"
             }

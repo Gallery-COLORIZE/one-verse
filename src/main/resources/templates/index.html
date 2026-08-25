@@ -3,337 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OneVerse - 오늘을 이겨낼 한마디</title>
-  <style>
-    /* 기본 스타일 및 폰트 설정 */
-    :root {
-      --primary-color: #4A5568;
-      --primary-hover: #2D3748;
-      --bg-color: #F7FAFC;
-      --card-bg: #FFFFFF;
-      --text-main: #2D3748;
-      --text-muted: #718096;
-      --accent-color: #E2E8F0;
-    }
-
-    body {
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .container {
-      background-color: var(--card-bg);
-      width: 100%;
-      max-width: 500px;
-      padding: 40px 30px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .header h1 {
-      font-size: 1.8rem;
-      margin: 0 0 10px 0;
-      color: var(--text-main);
-    }
-
-    .header p {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    /* 폼 영역 */
-    .radio-group {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 25px;
-      justify-content: center;
-    }
-
-    .radio-label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      font-weight: 500;
-      padding: 10px 15px;
-      border: 1px solid var(--accent-color);
-      border-radius: 8px;
-      transition: all 0.2s ease;
-    }
-
-    .radio-label:hover {
-      background-color: var(--bg-color);
-    }
-
-    .radio-label input[type="radio"] {
-      margin-right: 8px;
-      accent-color: var(--primary-color);
-    }
-
-    .input-group {
-      margin-bottom: 25px;
-      transition: opacity 0.3s ease;
-    }
-
-    /* input 텍스트와 textarea 공통 스타일 */
-    input[type="text"], textarea {
-      width: 100%;
-      padding: 15px;
-      border: 1px solid var(--accent-color);
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: inherit; /* 폰트 일치 */
-      box-sizing: border-box;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    /* textarea 전용 스타일 추가 */
-    textarea {
-      resize: vertical; /* 세로로만 크기 조절 가능하게 설정 */
-      min-height: 120px;
-      line-height: 1.5;
-    }
-
-    input[type="text"]:focus, textarea:focus {
-      border-color: var(--primary-color);
-    }
-
-    /* 버튼 및 로딩 상태 디자인 */
-    button.submit-btn {
-      width: 100%;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 15px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    button.submit-btn:hover:not(:disabled) {
-      background-color: var(--primary-hover);
-    }
-
-    button.submit-btn:disabled {
-      background-color: var(--text-muted);
-      cursor: not-allowed;
-    }
-
-    /* 로딩 스피너 애니메이션 */
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 1.2rem;
-      height: 1.2rem;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
-      margin-right: 10px;
-      display: none;
-    }
-
-    /* 결과 출력 영역 */
-    .result-card {
-      margin-top: 30px;
-      padding: 25px;
-      background-color: var(--bg-color);
-      border-radius: 12px;
-      border-left: 4px solid var(--primary-color);
-      animation: fadeIn 0.5s ease-in-out;
-    }
-
-    .result-card h3 {
-      margin: 0 0 15px 0;
-      font-size: 1rem;
-      color: var(--text-muted);
-    }
-
-    /* AI 말씀 스타일 */
-    .result-message {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      color: var(--text-main);
-      font-weight: 500;
-      margin: 0 0 20px 0;
-      word-break: keep-all;
-      white-space: pre-wrap;
-    }
-
-    /* 구절 출처 영역 스타일 */
-    .source-container {
-      text-align: right;
-    }
-
-    /* 💡 호버/클릭용 툴팁 감싸는 클래스 */
-    .verse-source-tooltip {
-      position: relative;
-      display: inline-block;
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      cursor: pointer;
-      border-bottom: 1px dashed var(--text-muted); /* 힌트용 밑줄 */
-      padding-bottom: 2px;
-    }
-
-    .verse-source-tooltip:focus {
-      outline: 2px solid var(--accent-color);
-      outline-offset: 4px;
-      border-radius: 4px;
-    }
-
-    /* 💡 툴팁으로 나타날 원본 말씀 박스 */
-    .verse-source-tooltip .tooltip-content {
-      visibility: hidden;
-      width: min(320px, calc(100vw - 40px));
-      box-sizing: border-box;
-      background-color: #2d3748d9; /* 살짝 투명한 어두운 배경 */
-      color: #fff;
-      text-align: left;
-      border-radius: 8px;
-      padding: 12px 15px;
-      position: absolute;
-      z-index: 10;
-      bottom: 130%; /* 구절 글자 위에 배치 */
-      right: 0;
-      opacity: 0;
-      transition: opacity 0.3s;
-      font-size: 0.85rem;
-      font-weight: 400;
-      line-height: 1.4;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-      word-break: keep-all;
-      overflow-wrap: anywhere;
-      white-space: normal;
-    }
-
-    /* 툴팁 아래에 작은 말풍선 삼각형 추가 */
-    .verse-source-tooltip .tooltip-content::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      right: 20px;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #2d3748d9 transparent transparent transparent;
-    }
-
-    /* 🔥 마우스를 올리거나(Hover) 클릭(Active)했을 때 노출 */
-    .verse-source-tooltip:hover .tooltip-content,
-    .verse-source-tooltip:active .tooltip-content,
-    .verse-source-tooltip:focus .tooltip-content,
-    .verse-source-tooltip:focus-within .tooltip-content {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    @media (max-width: 480px) {
-      .verse-source-tooltip .tooltip-content {
-        position: fixed;
-        left: 16px;
-        right: 16px;
-        bottom: calc(env(safe-area-inset-bottom, 0px) + 18px);
-        width: auto;
-        max-height: 45vh;
-        overflow-y: auto;
-        z-index: 100;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .verse-source-tooltip .tooltip-content::after {
-        display: none;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hidden {
-      display: none !important;
-    }
-  </style>
+  <meta name="theme-color" content="#0b0b0c">
+  <title>OneVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
 </head>
 <body>
-
-<div class="container">
-  <div class="header">
-    <h1>📖 OneVerse</h1>
-    <p>기꺼이 오늘을 살아가리라.</p>
-  </div>
-
-  <form th:action="@{/}" method="post" onsubmit="showLoading()">
-    <input th:if="${message != null and message.verseSource != 'Error'}"
-           type="hidden"
-           name="prevVerse"
-           th:value="${message.verseSource}">
-
-    <div class="radio-group">
-      <label class="radio-label">
-        <input type="radio" name="type" id="typeToday" value="TODAY"
-               th:checked="${type == null || type == 'TODAY'}" onchange="toggleInput()"> 오늘의 말씀
-      </label>
-      <label class="radio-label">
-        <input type="radio" name="type" id="typeSituation" value="SITUATION"
-               th:checked="${type == 'SITUATION'}" onchange="toggleInput()"> 내 상황 입력
-      </label>
-    </div>
-
-    <div class="input-group" id="situationInputGroup">
-      <textarea id="situationInput" name="situationInput"
-                placeholder="요즘 어떤 고민이나 감정을 느끼고 계신가요? 편하게 적어주세요."
-                th:text="${situationInput}"></textarea>
-    </div>
-
-    <button type="submit" id="submitBtn" class="submit-btn">
-      <span class="spinner" id="loadingSpinner"></span>
-      <span id="btnText">오늘을 살아낼 한마디</span>
-    </button>
-  </form>
-
-  <div class="result-card" th:if="${message != null}">
-
-    <p class="result-message" th:text="${message.customVerse}"></p>
-
-    <div class="source-container">
-      <div class="verse-source-tooltip" tabindex="0" aria-label="원본 말씀 보기">
-        <span th:text="${message.verseSource}">구절 출처</span>
-
-        <div class="tooltip-content">
-          <strong style="display:block; margin-bottom:5px; color:#E2E8F0;">[말씀 원본]</strong>
-          <span th:text="${message.originalVerse}">말씀 원본 내용이 여기에 들어갑니다.</span>
-        </div>
+<main class="app-shell">
+  <header class="top-card">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <img th:src="@{/images/logo.png}" alt="">
+      </div>
+      <div class="brand-copy">
+        <strong>OneVerse</strong>
+        <span>기꺼이 오늘을 살아가리라.</span>
       </div>
     </div>
-  </div>
-</div>
+    <div class="mini-note">오늘을 살아가게 할 한마디</div>
+  </header>
 
+  <section class="content-grid">
+    <article class="surface-card surface-card--result">
+      <div class="surface-card__header">
+        <h2>말씀 받기</h2>
+        <p>오늘의 말씀 또는 현재 상황을 입력해, 그에 맞는 문장으로 받아보세요.</p>
+      </div>
+
+      <div class="surface-card__body">
+        <form th:action="@{/}" method="post" onsubmit="showLoading()">
+          <input th:if="${message != null and message.verseSource != 'Error'}"
+                 type="hidden"
+                 name="prevVerse"
+                 th:value="${message.verseSource}">
+
+          <div class="choice-group">
+            <div class="choice">
+              <div class="mdc-form-field">
+                <div class="mdc-radio">
+                  <input class="mdc-radio__native-control"
+                         type="radio"
+                         name="type"
+                         id="typeToday"
+                         value="TODAY"
+                         th:checked="${type == null || type == 'TODAY'}"
+                         onchange="toggleInput()">
+                  <div class="mdc-radio__background">
+                    <div class="mdc-radio__outer-circle"></div>
+                    <div class="mdc-radio__inner-circle"></div>
+                  </div>
+                  <div class="mdc-radio__ripple"></div>
+                </div>
+                <label for="typeToday">오늘의 말씀</label>
+              </div>
+            </div>
+
+            <div class="choice">
+              <div class="mdc-form-field">
+                <div class="mdc-radio">
+                  <input class="mdc-radio__native-control"
+                         type="radio"
+                         name="type"
+                         id="typeSituation"
+                         value="SITUATION"
+                         th:checked="${type == 'SITUATION'}"
+                         onchange="toggleInput()">
+                  <div class="mdc-radio__background">
+                    <div class="mdc-radio__outer-circle"></div>
+                    <div class="mdc-radio__inner-circle"></div>
+                  </div>
+                  <div class="mdc-radio__ripple"></div>
+                </div>
+                <label for="typeSituation">상황 입력</label>
+              </div>
+            </div>
+          </div>
+
+          <div id="situationInputGroup">
+            <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea">
+              <span class="mdc-notched-outline">
+                <span class="mdc-notched-outline__leading"></span>
+                <span class="mdc-notched-outline__notch">
+                  <span class="mdc-floating-label" id="situation-label">상황 설명</span>
+                </span>
+                <span class="mdc-notched-outline__trailing"></span>
+              </span>
+              <span class="mdc-text-field__resizer">
+                <textarea class="mdc-text-field__input"
+                          id="situationInput"
+                          name="situationInput"
+                          aria-labelledby="situation-label"
+                          placeholder="지금 필요한 상황을 한두 문장으로 적어 주세요."
+                          th:text="${situationInput}"></textarea>
+              </span>
+            </label>
+            <div class="helper-text">
+              상황을 구체적으로 적을수록 더 단단한 말씀을 받기 쉽습니다.
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" id="submitBtn" class="mdc-button mdc-button--raised">
+              <span class="mdc-button__ripple"></span>
+              <span class="loading-dot" id="loadingDot" aria-hidden="true"></span>
+              <span class="mdc-button__label" id="btnText">말씀 받기</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </article>
+
+    <article class="surface-card">
+      <div class="surface-card__header">
+        <h2>결과</h2>
+        <p>생성된 말씀, 원문 구절, 그리고 출처를 한 화면에서 확인할 수 있습니다.</p>
+      </div>
+
+      <div th:if="${message != null}" class="result-stack">
+        <section class="verse-card">
+          <div class="verse-label">받은 말씀</div>
+          <p class="verse-text" th:text="${message.customVerse}">말씀이 여기에 표시됩니다.</p>
+          <div class="verse-meta">
+            <details class="source-popover">
+              <summary class="source-trigger">
+                <span class="tag">출처</span>
+                <span class="value" th:text="${message.verseSource}">출처가 여기에 표시됩니다.</span>
+              </summary>
+              <div class="source-popover__panel">
+                <div class="source-popover__title">원문 구절</div>
+                <div class="source-popover__text" th:text="${message.originalVerse}">원문이 여기에 표시됩니다.</div>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <div class="surface-card__body" style="padding-top: 0;">
+          <form th:action="@{/card}" method="post">
+            <input type="hidden" name="customVerse" th:value="${message.customVerse}">
+            <input type="hidden" name="originalVerse" th:value="${message.originalVerse}">
+            <input type="hidden" name="verseSource" th:value="${message.verseSource}">
+            <button type="submit" class="mdc-button mdc-button--raised">
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__label">말씀 카드 만들기</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div th:if="${verseCard != null}" class="result-stack" style="padding-top: 0;">
+        <div class="image-frame">
+          <img class="verse-image"
+               th:src="'data:image/jpeg;base64,' + ${verseCard}"
+               alt="말씀 카드 이미지">
+        </div>
+      </div>
+
+      <div th:if="${message == null and verseCard == null}" class="empty-state">
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm0 16H5V5h14v14Zm-2-9H7v-2h10v2Zm-4 4H7v-2h6v2Z"/>
+          </svg>
+        </div>
+        <h3>아직 받은 말씀이 없습니다</h3>
+        <p>왼쪽에서 조건을 선택한 뒤 말씀을 받아 보세요.<br>받은 말씀은 말씀카드로 만들 수 있습니다..</p>
+      </div>
+    </article>
+  </section>
+</main>
+
+<script src="https://unpkg.com/material-components-web@14.0.0/dist/material-components-web.min.js"></script>
 <script>
   function toggleInput() {
     const isSituation = document.getElementById('typeSituation').checked;
@@ -350,15 +191,40 @@
   function showLoading() {
     const submitBtn = document.getElementById('submitBtn');
     const btnText = document.getElementById('btnText');
-    const spinner = document.getElementById('loadingSpinner');
+    const loadingDot = document.getElementById('loadingDot');
 
     submitBtn.disabled = true;
-    btnText.innerText = '말씀이 응답중입니다...';
-    spinner.style.display = 'inline-block';
+    btnText.innerText = '말씀을 찾는 중...';
+    loadingDot.style.display = 'inline-block';
   }
 
-  window.onload = toggleInput;
-</script>
+  window.addEventListener('load', function () {
+    toggleInput();
 
+    document.querySelectorAll('.mdc-radio').forEach(function (el) {
+      new mdc.radio.MDCRadio(el);
+    });
+
+    document.querySelectorAll('.mdc-form-field').forEach(function (el) {
+      new mdc.formField.MDCFormField(el);
+    });
+
+    document.querySelectorAll('.mdc-text-field').forEach(function (el) {
+      new mdc.textField.MDCTextField(el);
+    });
+
+    document.querySelectorAll('.mdc-button').forEach(function (el) {
+      mdc.ripple.MDCRipple.attachTo(el);
+    });
+
+    document.addEventListener('click', function (event) {
+      document.querySelectorAll('.source-popover[open]').forEach(function (popover) {
+        if (!popover.contains(event.target)) {
+          popover.removeAttribute('open');
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
