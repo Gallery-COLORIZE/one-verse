@@ -1,8 +1,8 @@
-package com.neobible.oneverse.controller
+package com.colorize.oneverse.controller
 
-import com.neobible.oneverse.dto.BibleVerseDto
-import com.neobible.oneverse.service.BibleCardService
-import com.neobible.oneverse.service.BibleVerseService
+import com.colorize.oneverse.dto.BibleVerseDto
+import com.colorize.oneverse.service.BibleCardService
+import com.colorize.oneverse.service.BibleVerseService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

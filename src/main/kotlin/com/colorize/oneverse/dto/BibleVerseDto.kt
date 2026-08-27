@@ -1,4 +1,4 @@
-package com.neobible.oneverse.dto
+package com.colorize.oneverse.dto
 
 data class  BibleVerseDto(
     val customVerse: String,

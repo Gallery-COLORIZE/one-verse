@@ -1,6 +1,6 @@
-package com.neobible.oneverse.service
+package com.colorize.oneverse.service
 
-import com.neobible.oneverse.dto.BibleVerseDto
+import com.colorize.oneverse.dto.BibleVerseDto
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Service

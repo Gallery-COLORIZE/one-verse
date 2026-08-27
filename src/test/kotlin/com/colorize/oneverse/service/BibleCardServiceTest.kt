@@ -1,14 +1,14 @@
-package com.neobible.oneverse.service
+package com.colorize.oneverse.service
 
-import com.neobible.oneverse.dto.BibleVerseDto
-import com.neobible.oneverse.dto.Candidate
-import com.neobible.oneverse.dto.GeminiContent
-import com.neobible.oneverse.dto.GeminiPart
-import com.neobible.oneverse.dto.GeminiRequest
-import com.neobible.oneverse.dto.GeminiResponse
-import com.neobible.oneverse.dto.GenerationConfig
-import com.neobible.oneverse.dto.ImageConfig
-import com.neobible.oneverse.dto.InlineData
+import com.colorize.oneverse.dto.BibleVerseDto
+import com.colorize.oneverse.dto.Candidate
+import com.colorize.oneverse.dto.GeminiContent
+import com.colorize.oneverse.dto.GeminiPart
+import com.colorize.oneverse.dto.GeminiRequest
+import com.colorize.oneverse.dto.GeminiResponse
+import com.colorize.oneverse.dto.GenerationConfig
+import com.colorize.oneverse.dto.ImageConfig
+import com.colorize.oneverse.dto.InlineData
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldHaveSize

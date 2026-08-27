@@ -1,6 +1,6 @@
-package com.neobible.oneverse.service
+package com.colorize.oneverse.service
 
-import com.neobible.oneverse.dto.BibleVerseDto
+import com.colorize.oneverse.dto.BibleVerseDto
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain

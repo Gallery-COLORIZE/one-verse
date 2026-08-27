@@ -1,4 +1,4 @@
-package com.neobible.oneverse
+package com.colorize.oneverse
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

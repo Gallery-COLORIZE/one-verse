@@ -1,4 +1,4 @@
-package com.neobible.oneverse.dto
+package com.colorize.oneverse.dto
 
 data class GeminiRequest(
     val contents: List<Content>,
@@ -42,14 +42,4 @@ data class GeminiPart(
 data class InlineData(
     val mimeType: String,
     val data: String // Base64 인코딩된 이미지 문자열
-)
-
-
-data class GenerateImageRequest(
-    val prompt: String
-)
-
-data class GenerateImageResponse(
-    val mimeType: String,
-    val base64Image: String
 )

@@ -1,12 +1,12 @@
-package com.neobible.oneverse.service
+package com.colorize.oneverse.service
 
-import com.neobible.oneverse.dto.BibleVerseDto
-import com.neobible.oneverse.dto.Content
-import com.neobible.oneverse.dto.GeminiRequest
-import com.neobible.oneverse.dto.GeminiResponse
-import com.neobible.oneverse.dto.GenerationConfig
-import com.neobible.oneverse.dto.ImageConfig
-import com.neobible.oneverse.dto.Part
+import com.colorize.oneverse.dto.BibleVerseDto
+import com.colorize.oneverse.dto.Content
+import com.colorize.oneverse.dto.GeminiRequest
+import com.colorize.oneverse.dto.GeminiResponse
+import com.colorize.oneverse.dto.GenerationConfig
+import com.colorize.oneverse.dto.ImageConfig
+import com.colorize.oneverse.dto.Part
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
